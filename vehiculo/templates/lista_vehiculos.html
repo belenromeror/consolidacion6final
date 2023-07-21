@@ -1,0 +1,29 @@
+<!-- proyecto_vehiculos_django/vehiculo/templates/lista_vehiculos.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}Catálogo de Vehículos{% endblock %}
+
+{% block content %}
+<h1>Catálogo de Vehículos</h1>
+
+{% if vehiculos %}
+    <ul>
+        {% for vehiculo in vehiculos %}
+            <li>
+                <strong>Marca:</strong> {{ vehiculo.marca }}<br>
+                <strong>Modelo:</strong> {{ vehiculo.modelo }}<br>
+                <strong>Serial Carrocería:</strong> {{ vehiculo.serial_carroceria }}<br>
+                <strong>Serial Motor:</strong> {{ vehiculo.serial_motor }}<br>
+                <strong>Categoría:</strong> {{ vehiculo.categoria }}<br>
+                <strong>Precio:</strong> {{ vehiculo.precio }}<br>
+                <strong>Condición de Precio:</strong> {{ vehiculo.condicion_precio }}<br>
+                <hr>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No hay vehículos registrados.</p>
+{% endif %}
+
+{% endblock %}
