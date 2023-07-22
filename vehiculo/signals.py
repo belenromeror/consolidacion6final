@@ -15,7 +15,6 @@ def create_permissions(sender, **kwargs):
             name='Puede visualizar Catálogo de Vehículos',
             content_type=content_type,
         )
-
     if not Permission.objects.filter(codename='add_vehiculo').exists():
         content_type = ContentType.objects.get_for_model(Vehiculo)
         Permission.objects.create(

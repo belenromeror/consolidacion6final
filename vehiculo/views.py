@@ -37,14 +37,6 @@ def add_vehiculo(request):
         form = VehiculoForm()
         return render(request, 'add_vehiculo.html', {'form': form})
 
-
-def asignar_permiso_visualizar_catalogo(sender, user, **kwargs):
-    permission = Permission.objects.get(codename='visualizar_catalogo')
-    user.user_permissions.add(permission)
-
-from django.contrib.auth.signals import user_registered
-user_registered.connect(asignar_permiso_visualizar_catalogo)
-
 def registro_usuario(request):
     if request.method == 'POST':
         form = RegistroUsuarioForm(request.POST)
