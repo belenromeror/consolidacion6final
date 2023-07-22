@@ -1,14 +1,7 @@
-from django.contrib.auth.models import Permission
-from django.contrib.contenttypes.models import ContentType
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
-from .signals import asignar_permiso_visualizar_catalogo
 from django.utils.translation import gettext_lazy as _
-
+from django.contrib.contenttypes.models import ContentType
 
 class Vehiculo(models.Model):
     MARCA_CHOICES = [
@@ -36,6 +29,15 @@ class Vehiculo(models.Model):
     def __str__(self):
         return f"{self.marca} - {self.modelo}"
 
+    @classmethod
+    def get_visualizar_catalogo_permission(cls):
+        content_type = ContentType.objects.get_for_model(cls)
+        permission, _ = Permission.objects.get_or_create(
+            codename='visualizar_catalogo',
+            name='Puede visualizar Catálogo de Vehículos',
+            content_type=content_type,
+        )
+        return permission
 
 class Usuario(AbstractUser):
     nombre = models.CharField(max_length=15, blank=True, null=True)
@@ -66,29 +68,3 @@ class Usuario(AbstractUser):
 
     def __str__(self):
         return self.username
-
-def asignar_permiso_visualizar_catalogo(instance, created, **kwargs):
-    if created:
-        content_type = ContentType.objects.get_for_model(Vehiculo)
-        permission, _ = Permission.objects.get_or_create(
-            codename='visualizar_catalogo',
-            name='Puede visualizar Catálogo de Vehículos',
-            content_type=content_type
-        )
-        instance.user_permissions.add(permission)
-
-
-@receiver(post_save, sender=Usuario)
-def on_usuario_post_save(sender, instance, created, **kwargs):
-    asignar_permiso_visualizar_catalogo(sender, instance, created, **kwargs)
-
-
-def asignar_permiso_can_add_vehiculo(instance, created, **kwargs):
-    if created:
-        content_type = ContentType.objects.get_for_model(Vehiculo)
-        permission, _ = Permission.objects.get_or_create(
-            codename='add_vehiculo',
-            name='Can add vehiculo model',
-            content_type=content_type
-        )
-        instance.user_permissions.add(permission)
