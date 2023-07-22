@@ -2,6 +2,8 @@ from django.urls import path
 from .views import index, listar, add_vehiculo, iniciar_sesion,cerrar_sesion, registro_usuario, home_page_not_login
 from . import views
 
+app_vehiculo = 'accounts'
+
 urlpatterns = [
     path('', index, name='index'),
     path('vehiculo/add/', add_vehiculo, name='add_vehiculo'),

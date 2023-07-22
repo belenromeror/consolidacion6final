@@ -52,7 +52,7 @@ def registro_usuario(request):
             user = form.save()
             # No es necesario asignar permisos aquí, las señales se encargarán de eso
             login(request, user)
-            return redirect('listar')
+            return redirect('lista_vehiculos')
     else:
         form = RegistroUsuarioForm()
     return render(request, 'registro_usuario.html', {'form': form})
